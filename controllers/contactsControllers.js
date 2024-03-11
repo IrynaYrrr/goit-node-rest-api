@@ -71,3 +71,22 @@ export const updateContact = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const updateStatusContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
+    const contact = await contactsServices.updateStatusContact(
+      id,
+      favorite
+    );
+
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json(contact);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

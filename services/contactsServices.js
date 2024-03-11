@@ -37,10 +37,21 @@ const updateContact = async (id, name, email, phone) => {
   return contact;
 };
 
+const updateStatusContact = async (id, favorite) => {
+  const contact = await getContactById(id);
+  if (contact) {
+    contact.favorite = favorite ?? contact.favorite;
+    await contact.save();
+  }
+
+  return contact;
+};
+
 export default {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
