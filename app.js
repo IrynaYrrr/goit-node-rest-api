@@ -1,8 +1,13 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-
+import { connect } from './db/mongoose.js';
 import contactsRouter from "./routes/contactsRouter.js";
+
+connect().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
 
 const app = express();
 
