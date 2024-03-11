@@ -1,52 +1,37 @@
-import fs from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
-
-const contactsPath = path.resolve("db", "contacts.json");
+import { Contact } from '../schemas/contactsSchemas.js';
 
 const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
+  const contacts = await Contact.find();
 
-  return JSON.parse(contacts);
+  return contacts;
 };
 
 const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === id);
+  const contact = await Contact.findById(id)
 
   return contact;
 };
 
 const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === id);
-
-  if (contact) {
-    const updatedContacts = contacts.filter((contact) => contact.id !== id);
-    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-  }
+  const contact = await Contact.findByIdAndDelete(id)
 
   return contact;
 };
 
 const addContact = async (name, email, phone) => {
-  const contacts = await listContacts();
-  const newContact = { id: nanoid(), name, email, phone };
-  const updatedContacts = [...contacts, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+  const contact = new Contact({name, email, phone});
+  await contact.save()
 
-  return newContact;
+  return contact;
 };
 
 const updateContact = async (id, name, email, phone) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === id);
-
+  const contact = await getContactById(id);
   if (contact) {
     contact.name = name ?? contact.name;
     contact.email = email ?? contact.email;
     contact.phone = phone ?? contact.phone;
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    await contact.save();
   }
 
   return contact;
