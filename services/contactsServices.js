@@ -19,7 +19,7 @@ const removeContact = async (id) => {
 };
 
 const addContact = async (name, email, phone) => {
-  const contact = new Contact({name, email, phone});
+  const contact = new Contact({ name, email, phone });
   await contact.save()
 
   return contact;
