@@ -21,7 +21,7 @@ export const getOneContact = async (req, res) => {
 
     res.json(contact);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: `Bad request` });
   }
 };
 
@@ -36,7 +36,7 @@ export const deleteContact = async (req, res) => {
 
     res.json(contact);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: `Bad request` });
   }
 };
 
@@ -47,7 +47,7 @@ export const createContact = async (req, res) => {
 
     res.status(201).json(contact);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -68,6 +68,25 @@ export const updateContact = async (req, res) => {
 
     res.json(contact);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: `Bad request` });
+  }
+};
+
+export const updateStatusContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
+    const contact = await contactsServices.updateStatusContact(
+      id,
+      favorite
+    );
+
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json(contact);
+  } catch (error) {
+    return res.status(400).json({ message: `Bad request` });
   }
 };
