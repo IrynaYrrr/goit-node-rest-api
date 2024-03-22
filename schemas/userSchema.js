@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { emailRegexp } from '../constants/user-constants';
+import { emailRegexp } from '../constants/user-constants.js';
 
 
 export const userSignUpSchema = Joi.object({
