@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import { connect } from './db/mongoose.js';
 import contactsRouter from "./routes/contactsRouter.js";
+import authRouter from './routes/authRouter.js';
 
 connect().catch(err => {
   console.error(err);
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
