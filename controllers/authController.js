@@ -48,7 +48,7 @@ const signin = async (req, res) => {
     id,
   }
 
-  user.token  = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
+  user.token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
   await user.save()
 
   res.json({
@@ -62,14 +62,21 @@ const signin = async (req, res) => {
 
 const logout = async (req, res) => {
   req.user.token = null;
-
   await req.user.save();
 
   res.status(204).end()
 }
 
+const current = async (req, res) => {
+  res.status(200).json({
+    email: req.user.email,
+    subscription: req.user.subscription,
+  })
+}
+
 export const authController = {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
-  logout: ctrlWrapper(logout)
+  logout: ctrlWrapper(logout),
+  current: ctrlWrapper(current),
 }
