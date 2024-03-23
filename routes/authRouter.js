@@ -8,7 +8,7 @@ import { userSignUpSchema, userSignInSchema } from '../schemas/userSchema.js';
 
 const authRouter = express.Router();
 
-authRouter.post('/signup', validateBody(userSignUpSchema), authController.signup);
+authRouter.post('/users/register', validateBody(userSignUpSchema), authController.signup);
 
 authRouter.post('/signin', validateBody(userSignInSchema), authController.signin);
 
