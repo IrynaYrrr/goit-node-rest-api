@@ -2,7 +2,9 @@ import contactsServices from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
   try {
-    const contacts = await contactsServices.listContacts();
+    const {favorite} = req.query;
+
+    const contacts = await contactsServices.listContacts(favorite);
 
     res.json(contacts);
   } catch (error) {
