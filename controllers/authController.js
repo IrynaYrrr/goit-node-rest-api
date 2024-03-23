@@ -31,25 +31,30 @@ const signin = async (req, res) => {
 
   const user = await authServices.findUser({ email });
   if (!user) {
-    throw HttpError(401, 'Email or password is not valid');
+    throw HttpError(401, 'Email or password is wrong');
   }
 
   const comparePassword = await authServices.validatePassword(password, user.password);
 
   if (!comparePassword) {
-    throw HttpError(401, 'Email or password is not valid');
+    throw HttpError(401, 'Email or password is wrong');
   }
 
-  const {_id: id} = user;
+  const { _id: id } = user;
 
   const payload = {
     id,
   }
 
-  const token = jwt.sign(payload, JWT_SECRET, {expiresIn: '23h'});
+  user.token  = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
+  await user.save()
 
   res.json({
-    token,
+    token: user.token,
+    user: {
+      email: user.email,
+      subscription: user.subscription
+    }
   })
 }
 
