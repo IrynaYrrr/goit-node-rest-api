@@ -7,3 +7,5 @@ export const signup = async (data) => {
   const hashPassword = await bcrypt.hash(data.password, 10);
   return User.create({ ...data, password: hashPassword })
 }
+
+export const validatePassword = (password, hashPassword) => bcrypt.compare(password, hashPassword);

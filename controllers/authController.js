@@ -19,6 +19,28 @@ const signup = async (req, res) => {
   })
 }
 
+const signin = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await authServices.findUser({ email });
+  if (!user) {
+    throw HttpError(401, 'Email or password is not valid');
+  }
+
+  const comparePassword = await authServices.validatePassword(password, user.password);
+
+  if (!comparePassword) {
+    throw HttpError(401, 'Email or password is not valid');
+  }
+
+  const token = '122.3123.333';
+
+  res.json({
+    token,
+  })
+}
+
 export const authController = {
-  signup: ctrlWrapper(signup)
+  signup: ctrlWrapper(signup),
+  signin: ctrlWrapper(signin)
 }
