@@ -74,9 +74,23 @@ const current = async (req, res) => {
   })
 }
 
+const subscription = async (req, res) => {
+  const { subscription } = req.body;
+
+  req.user.subscription = subscription;
+
+  await req.user.save();
+
+  res.status(200).json({
+    email: req.user.email,
+    subscription: req.user.subscription,
+  })
+}
+
 export const authController = {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
+  subscription: ctrlWrapper(subscription),
 }
