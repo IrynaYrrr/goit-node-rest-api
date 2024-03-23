@@ -1,11 +1,11 @@
 import { Contact } from '../models/contactsModel.js';
 
-const listContacts = async (favorite) => {
+const listContacts = async (favorite, page, limit) => {
   if (favorite === 'true' || favorite === 'false' ) {
-    return Contact.find({ favorite: favorite })
+    return Contact.find({ favorite: favorite }).limit(limit).skip((page-1) * limit)
   }
 
-  return Contact.find();
+  return Contact.find().limit(limit).skip((page-1) * limit);
 };
 
 const getContactById = async (id) => {

@@ -2,9 +2,17 @@ import contactsServices from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
   try {
-    const {favorite} = req.query;
+    let { favorite, page, limit } = req.query;
 
-    const contacts = await contactsServices.listContacts(favorite);
+    if (!page || isNaN(Number(page))) {
+      page = 1;
+    }
+
+    if (!limit || isNaN(Number(limit))) {
+      limit = 100;
+    }
+
+    const contacts = await contactsServices.listContacts(favorite, page, limit);
 
     res.json(contacts);
   } catch (error) {
