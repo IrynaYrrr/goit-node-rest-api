@@ -21,7 +21,7 @@ export const authenticate = async (req, _, next) => {
       return next(HttpError(401, "Not authorized"));
     }
     if (!user.token) {
-      return next(HttpError(401, "User already signout"));
+      return next(HttpError(401, "Not authorized"));
     }
     req.user = user;
     next();

@@ -8,6 +8,8 @@ import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 const { JWT_SECRET } = process.env;
 
+
+
 const signup = async (req, res) => {
   const { email } = req.body;
 
@@ -58,7 +60,16 @@ const signin = async (req, res) => {
   })
 }
 
+const logout = async (req, res) => {
+  req.user.token = null;
+
+  await req.user.save();
+
+  res.status(204).end()
+}
+
 export const authController = {
   signup: ctrlWrapper(signup),
-  signin: ctrlWrapper(signin)
+  signin: ctrlWrapper(signin),
+  logout: ctrlWrapper(logout)
 }
