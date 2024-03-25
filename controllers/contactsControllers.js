@@ -2,6 +2,8 @@ import contactsServices from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
+
     let { favorite, page, limit } = req.query;
 
     if (!page || isNaN(Number(page))) {
@@ -12,7 +14,7 @@ export const getAllContacts = async (req, res) => {
       limit = 100;
     }
 
-    const contacts = await contactsServices.listContacts(favorite, page, limit);
+    const contacts = await contactsServices.listContacts(owner, favorite, page, limit);
 
     res.json(contacts);
   } catch (error) {
@@ -22,8 +24,9 @@ export const getAllContacts = async (req, res) => {
 
 export const getOneContact = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
     const { id } = req.params;
-    const contact = await contactsServices.getContactById(id);
+    const contact = await contactsServices.getContactById(owner, id);
 
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
@@ -37,8 +40,9 @@ export const getOneContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
     const { id } = req.params;
-    const contact = await contactsServices.removeContact(id);
+    const contact = await contactsServices.removeContact(owner, id);
 
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
@@ -52,8 +56,9 @@ export const deleteContact = async (req, res) => {
 
 export const createContact = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
     const { name, email, phone } = req.body;
-    const contact = await contactsServices.addContact(name, email, phone);
+    const contact = await contactsServices.addContact(owner, name, email, phone);
 
     res.status(201).json(contact);
   } catch (error) {
@@ -63,9 +68,11 @@ export const createContact = async (req, res) => {
 
 export const updateContact = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
     const { id } = req.params;
     const { name, email, phone } = req.body;
     const contact = await contactsServices.updateContact(
+      owner,
       id,
       name,
       email,
@@ -84,9 +91,11 @@ export const updateContact = async (req, res) => {
 
 export const updateStatusContact = async (req, res) => {
   try {
+    const { _id: owner } = req.user;
     const { id } = req.params;
     const { favorite } = req.body;
     const contact = await contactsServices.updateStatusContact(
+      owner,
       id,
       favorite
     );
