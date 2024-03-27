@@ -85,7 +85,12 @@ const subscription = async (req, res) => {
 }
 
 const avatars = async (req, res) => {
+  if (!req.file) {
+    throw HttpError(400, 'Upload file missing');
+  }
+
   const image = await Jimp.read(req.file.path);
+
   image.resize(250, 250).write(path.join('public', 'avatars', req.file.filename));
   const avatarURL = `/avatars/${req.file.filename}`;
   req.user.avatarURL = avatarURL;
